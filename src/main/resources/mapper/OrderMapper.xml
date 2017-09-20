@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dayuanit.mall.mapper.OrderMapper">
+
+	<resultMap id="orderResultMap" type="order">
+		<id property="id" column="id" />
+		<result property="userId" column="user_id"/>
+		<result property="goodsId" column="goods_id"/>
+		<result property="price" column="price"/>
+		<result property="goodsNum" column="goods_num"/>
+		<result property="total" column="total"/>
+		<result property="status" column="status"/>
+		<result property="tips" column="tips"/>
+		<result property="source" column="source"/>
+		<result property="province" column="province"/>
+		<result property="city" column="city"/>
+		<result property="area" column="area"/>
+		<result property="createTime" column="create_time"/>
+		<result property="modifyTime" column="modify_time"/>
+	</resultMap>
+	
+	<sql id="mall_order_filed">
+		id, user_id, goods_id, price, goods_num, total, status, tips, source,
+		province, city, area, create_time, modify_time
+	</sql>
+	
+	<insert id="addOrder" parameterType="order">
+		insert into mall_order(user_id, goods_id, price, goods_num, total, status, tips, source,
+		province, city, area, create_time, modify_time) value (#{userId}, #{goodsId}, #{price},
+		#{goodsNum}, #{total}, #{status}, #{tips}, #{source}, #{province}, #{city}, #{area}, now(), now())
+	</insert>
+	
+<!-- 	<select id="listOrder" resultMap="orderResultMap">
+		select <include refid="mall_order_filed"></include> from mall_order
+		where user_id=#{userId};
+	</select> -->
+	
+	<select id="listOrder" resultMap="orderResultMap">
+		select <include refid="mall_order_filed"></include> from mall_order
+		where 1=1
+		<if test="userId != null">
+			and user_id=#{userId}
+		</if>
+		
+		<if test="status != null">
+			and status=#{status}
+		</if>
+	</select>
+	
+	<select id="getOrderById" resultMap="orderResultMap">
+		select <include refid="mall_order_filed"></include> from mall_order
+		where id=#{orderId};
+	</select>
+</mapper>

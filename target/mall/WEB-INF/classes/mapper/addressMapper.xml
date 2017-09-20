@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dayuanit.mall.mapper.AddressMapper">
+
+	<resultMap id="addressResultMap" type="address">
+		<id property="id" column="id" />
+		<result property="userId" column="user_id"/>
+		<result property="provinceCode" column="province_code"/>
+		<result property="cityCode" column="city_code"/>
+		<result property="areaCode" column="area_code"/>
+		<result property="provinceName" column="province_name"/>
+		<result property="cityName" column="city_name"/>
+		<result property="areaName" column="area_name"/>
+		<result property="detailAddress" column="detail_address"/>
+		<result property="phone" column="phone"/>
+		<result property="realName" column="real_name"/>
+		<result property="status" column="status"/>
+		<result property="type" column="type"/>
+		<result property="createTime" column="create_time"/>
+		<result property="modifyTime" column="modify_time"/>
+	</resultMap>
+	
+	<sql id="mall_address_filed">
+		id, user_id, province_code, city_code, area_code, province_name, city_name, area_name, detail_address, phone, real_name, status, type,
+		create_time, modify_time
+	</sql>
+	
+	<insert id="addAddress" parameterType="address">
+		insert into mall_address(user_id, province_code, city_code, area_code, province_name, city_name, area_name, detail_address, phone, real_name, status, type,
+		create_time, modify_time) value (#{userId}, #{provinceCode}, #{cityCode},
+		#{areaCode}, #{provinceName}, #{cityName}, #{areaName}, #{detailAddress}, #{phone}, #{realName}, #{status}, #{type}, now(), now())
+	</insert>
+	
+	<select id="getAddressById" parameterType="int" resultMap="addressResultMap">
+		select <include refid="mall_address_filed"></include> from mall_address 
+		where id=#{addressId};
+	</select>
+	
+	<select id="listAddress" parameterType="int" resultMap="addressResultMap">
+		select <include refid="mall_address_filed"></include> from mall_address
+		where user_id=#{userId} and status=1;	
+	</select>
+	
+	<update id="updateAddressByStatus" parameterType="int">
+		update mall_address set status=2 where id=#{addressId};	 	
+	</update>
+	
+	<update id="updateAddressByType" parameterType="int">
+		update mall_address set type=2 where id=#{addressId};
+	</update>
+	
+	<update id="modifyAddress">
+		update mall_address set province_code=#{provinceCode}, city_code=#{cityCode}, area_code=#{areaCode},
+		 province_name=#{provinceName}, city_name=#{cityName}, area_name=#{areaName}, 
+		 detail_address=#{detailAddress}, phone=#{phone}, real_name=#{realName}, type=#{type},
+		 modify_time=now() where id=#{id};		
+	</update>
+</mapper>

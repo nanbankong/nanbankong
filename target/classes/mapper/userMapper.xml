@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dayuanit.mall.mapper.UserMapper">
+
+	<resultMap id="userResultMap" type="user">
+		<id property="id" column="id" />
+		<result property="userName" column="user_name"/>
+		<result property="password" column="password"/>
+		<result property="email" column="email"/>
+		<result property="createTime" column="create_time"/>
+	</resultMap>
+	
+	<sql id="mall_user_filed">
+		id, user_name, password, email, create_time
+	</sql>
+
+	<insert id="addUser" parameterType="user" useGeneratedKeys="true" keyProperty="id">
+		insert into mall_user(id, user_name, password, email, create_time)
+		value(#{id}, #{userName}, #{password}, #{email}, now())
+	</insert>
+	
+	<select id="getUserByName" resultMap="userResultMap">
+		select <include refid="mall_user_filed"></include> from mall_user
+		where user_name=#{userName};
+	</select>
+	
+	<select id="getUserById" resultMap="userResultMap">
+		select <include refid="mall_user_filed"></include> from mall_user
+		where id=#{userId};
+	</select>
+</mapper>
+
